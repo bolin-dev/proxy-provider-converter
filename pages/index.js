@@ -11,11 +11,9 @@ if (typeof window !== "undefined") {
 
 export default function Home() {
   const [url, setUrl] = useState("");
-  const [target, setTarget] = useState("clash");
+  const [target, setTarget] = useState("Clash Premium");
 
-  const convertedUrl = `${host}/api/convert?url=${encodeURIComponent(
-    url
-  )}&target=${target}`;
+  const convertedUrl = `${host}/api/convert?url=${encodeURIComponent(url)}&target=${target}`;
 
   let urlHost = "";
   try {
@@ -29,7 +27,7 @@ export default function Home() {
       position: "bottom-center",
     });
 
-  const clashConfig = `# Clash 配置格式
+  const clashConfig = `# 配置格式
 
 proxy-groups:
   - name: UseProvider
@@ -53,12 +51,6 @@ proxy-providers:
       url: http://www.gstatic.com/generate_204
 `;
 
-  const surgeConfig = `# Surge 配置格式
-
-[Proxy Group]
-${urlHost || "egroup"} = select, policy-path=${convertedUrl}
-`;
-
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       <Head>
@@ -70,19 +62,14 @@ ${urlHost || "egroup"} = select, policy-path=${convertedUrl}
         <div className="flex flex-col items-start md:items-center md:flex-row">
           <img src="/logo.svg" alt="Logo" className="md:mr-4 h-28" />
           <div>
-            <h1 className="text-2xl font-extrabold text-black md:text-5xl">
-              Proxy Provider Converter
-            </h1>
+            <h1 className="text-2xl font-extrabold text-black md:text-5xl">Proxy Provider Converter</h1>
             <p className="mt-2 md:text-lg text-gray-600">
-              一个可以将 Clash 订阅转换成 Proxy Provider 和 External
-              Group(Surge) 的工具
+              一个可以将 Clash 订阅转换成 Proxy Provider 和 External Group(Surge) 的工具
             </p>
           </div>
         </div>
         <div className="mt-12 text-gray-900">
-          <h3 className="text-lg md:text-xl font-bold">
-            什么是 Proxy Provider 和 External Group？
-          </h3>
+          <h3 className="text-lg md:text-xl font-bold">什么是 Proxy Provider 和 External Group？</h3>
           <p className="mt-2">
             <a
               href="https://github.com/Dreamacro/clash/wiki/configuration#proxy-providers"
@@ -90,12 +77,9 @@ ${urlHost || "egroup"} = select, policy-path=${convertedUrl}
             >
               Proxy Provider
             </a>{" "}
-            是 Clash
-            的一项功能，可以让用户从指定路径动态加载代理服务器列表。使用这个功能你可以将
-            Clash
-            订阅里面的代理服务器提取出来，放到你喜欢的配置文件里，也可以将多个
-            Clash 订阅里的代理服务器混合到一个配置文件里。External Group 则是
-            Proxy Provider 在 Surge 里的叫法，作用是一样的。
+            是 Clash 的一项功能，可以让用户从指定路径动态加载代理服务器列表。使用这个功能你可以将 Clash
+            订阅里面的代理服务器提取出来，放到你喜欢的配置文件里，也可以将多个 Clash
+            订阅里的代理服务器混合到一个配置文件里。External Group 则是 Proxy Provider 在 Surge 里的叫法，作用是一样的。
           </p>
         </div>
         <div className="w-full text-gray-900 mt-14">
@@ -103,7 +87,7 @@ ${urlHost || "egroup"} = select, policy-path=${convertedUrl}
           <div className="flex w-full gap-4 mt-4 flex-col md:flex-row">
             <input
               className="w-full h-full p-4 text-lg bg-white rounded-lg shadow-sm focus:outline-none"
-              placeholder="粘贴 Clash 订阅链接到这里"
+              placeholder="粘贴订阅链接到这里"
               value={url}
               onChange={(e) => setUrl(e.target.value)}
             />
@@ -113,8 +97,8 @@ ${urlHost || "egroup"} = select, policy-path=${convertedUrl}
                 value={target}
                 onChange={(e) => setTarget(e.target.value)}
               >
-                <option value="clash">转换到 Clash</option>
-                <option value="surge">转换到 Surge</option>
+                <option value="Clash Premium">转换到 Clash</option>
+                <option value="Stash">转换到 Stash</option>
               </select>
               <SelectorIcon className="absolute h-6 top-3.5 right-3 text-gray-400" />
             </div>
@@ -135,11 +119,7 @@ ${urlHost || "egroup"} = select, policy-path=${convertedUrl}
         {url && (
           <div className="w-full p-4 mt-4 text-gray-100 bg-gray-900 rounded-lg hidden md:block">
             {/* prettier-ignore */}
-            {target !== "surge" && (
-              <pre className="whitespace-pre-wrap">{clashConfig}</pre>
-            )}
-
-            {target === "surge" && <pre>{surgeConfig}</pre>}
+            <pre className="whitespace-pre-wrap">{clashConfig}</pre>
             {/* prettier-ignore */}
 
             <CopyToClipboard
@@ -154,22 +134,15 @@ ${urlHost || "egroup"} = select, policy-path=${convertedUrl}
           </div>
         )}
         <div className="w-full text-gray-900 mt-14">
-          <h3 className="text-lg md:text-xl font-bold">
-            怎么自己部署转换工具？
-          </h3>
+          <h3 className="text-lg md:text-xl font-bold">怎么自己部署转换工具？</h3>
           <p className="mt-2">
-            使用工具时，{host}{" "}
-            的拥有者将会有权限查看到你的订阅地址，如果你不想让给他人这种权限，
+            使用工具时，{host} 的拥有者将会有权限查看到你的订阅地址，如果你不想让给他人这种权限，
             你可以根据下面步骤你可以零成本部署一个属于你的转换工具。
           </p>
           <p className="mt-2">
             {" "}
             前期准备：你需要一个{" "}
-            <a
-              href="https://github.com"
-              target="_blank"
-              className="text-yellow-600 transition hover:text-yellow-500"
-            >
+            <a href="https://github.com" target="_blank" className="text-yellow-600 transition hover:text-yellow-500">
               GitHub
             </a>{" "}
             账号
@@ -188,23 +161,16 @@ ${urlHost || "egroup"} = select, policy-path=${convertedUrl}
             <li>2. 点击右上角的 Fork 按钮</li>
             <li>
               3. 打开{" "}
-              <a
-                href="https://vercel.com"
-                target="_blank"
-                className="text-yellow-600 transition hover:text-yellow-500"
-              >
+              <a href="https://vercel.com" target="_blank" className="text-yellow-600 transition hover:text-yellow-500">
                 Vercel.com
               </a>
               ，使用 GitHub 登录。
             </li>
             <li>
-              4. 选择 New Project，点击 proxy-provider-converter 旁边的 Import
-              按钮, 点击 PERSONAL ACCOUNT 旁边的 Select，最后点击 Deploy
+              4. 选择 New Project，点击 proxy-provider-converter 旁边的 Import 按钮, 点击 PERSONAL ACCOUNT 旁边的
+              Select，最后点击 Deploy
             </li>
-            <li>
-              5. 等待部署完成后点击 Vercel 项目面板上的 Visit
-              按钮就可以访问你部署的版本了
-            </li>
+            <li>5. 等待部署完成后点击 Vercel 项目面板上的 Visit 按钮就可以访问你部署的版本了</li>
           </ul>
         </div>
         <div className="w-full text-gray-900 mt-14">
@@ -233,12 +199,7 @@ ${urlHost || "egroup"} = select, policy-path=${convertedUrl}
       </main>
 
       <footer className="w-full p-4 max-w-4xl md:py-8">
-        <a
-          className="flex items-center"
-          href="https://vercel.com"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <a className="flex items-center" href="https://vercel.com" target="_blank" rel="noopener noreferrer">
           Powered by
           <img src="/vercel.svg" alt="Vercel Logo" className="h-4 ml-2" />
         </a>
